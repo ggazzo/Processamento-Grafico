@@ -12,7 +12,14 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>          /* Open GL Util    APPLE */
 #else
+
+    #ifdef _WIN32
+        #include <Windows.h>
+    #endif
+
 #include <GL/glut.h>            /* Open GL Util    OpenGL*/
+
+
 #endif
 
 #endif
