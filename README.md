@@ -13,4 +13,6 @@ float width; // largura
 float height; // altura
 float r,g,b; // escala de cor 
 ```
+##### Desenho esperado:
+
 ![Exemplo de visualização](http://i.imgur.com/bEUGucW.png)
