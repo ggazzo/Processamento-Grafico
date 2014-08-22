@@ -13,10 +13,15 @@
 #include "includes.h"
 class Retangle
 {
+private:
+    bool visible = true;
+
 public:
     unsigned char r;
     unsigned char g;
     unsigned char b;
+    void setVisible(bool);
+    bool getVisible(void);
     void setColors(unsigned  char ,unsigned char , unsigned char );
     Retangle(unsigned  char ,unsigned char , unsigned char );
     

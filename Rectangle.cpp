@@ -18,6 +18,9 @@ void Retangle::setColors(unsigned char r, unsigned char g, unsigned char b){
 }
 
 void Retangle::draw(float x, float y){
+    if(!this->visible){
+        return;
+    }
     glColor3ub (this->r, this->g, this->b);
     glBegin(GL_QUAD_STRIP);
         glVertex2d (x + 1, y + 1 );
@@ -25,4 +28,10 @@ void Retangle::draw(float x, float y){
         glVertex2d (x + 1 , y + 4);
         glVertex2d (x + 9 , y + 4);
     glEnd();
+}
+void Retangle::setVisible(bool visible){
+    this->visible = visible;
+}
+bool Retangle::getVisible(){
+    return this->visible;
 }

@@ -19,20 +19,29 @@ public:
     virtual void _draw(float, float);
     float x;
     float y;
+    float rx;
+    float ry;
+    float h;
+    float w;
+    int status = 0;
     Drawable(float,float);
+    //Drawable *testClick(float , float);
+   // virtual void click(void (*f)(void), float, float);
 };
 
-
+//void Drawable::click(void (*f)(void), float x, float y){
+//    f();
+//}
 
 class Modal : public Drawable
 {
 private:
     int childs = 0;
-
-    vector <Drawable*> d;
 public:
+    vector <Drawable*> d;
     unsigned char status;
     void _draw(float, float);
+    void draw(float, float);
     void addChild(Drawable*);
     Modal(float,float);
 };

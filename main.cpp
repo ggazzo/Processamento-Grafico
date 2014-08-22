@@ -2,7 +2,7 @@
 #define W_WIDTH 600
 #define W_HEIGHT 600
 
-
+#include "Game.h"
 
 
 
@@ -43,8 +43,8 @@ using namespace std;
 
 #include "Objects.h"
 
-Retangle  **r = new Retangle*[400];
 
+Game game;
 
 #define xi 0.0
 #define xf 200.0
@@ -69,43 +69,13 @@ void write(string text){
 
 
 
-
-void newGrid(void){
-    for(int i = 0; i < 20;i++){
-        for(int j= 0; j < 20 ; j++){
-            r[i*20+j] = new Retangle(127,i*10,j*10);
-        }
-    }
-}
-				
-void drawGrid(void){
-    
-    for(int i = 0; i < 20;i++){
-        for(int j= 0; j < 20 ; j++){
-            r[i*20+j]->draw(i*10.0,j*5.0);
-        }
-    }
-    
-}
-
-Modal m(50,50);
-
-
 void display(void)
 {
     /*  clear all pixels  */
     glClear (GL_COLOR_BUFFER_BIT);
     
-    drawGrid();
-    //m.addChild(new Label);
-    
-    //m.addChild(new Input);
-   // m.addChild(new Label);
-    
-    m.draw(10, 20);
-    //input.draw(20,20);
-    
-    //l.draw(30,30);
+   // drawGrid();
+    game.display();
     glRasterPos2f(0.1,0.1);
     write("Guilherme e Carlos");
     glColor3f (1, 1, 1);
@@ -121,18 +91,15 @@ void display(void)
 }
 
 
-Input input("Player1",1,2);
+
 void init (void)
-{
-    m.addChild(&input);
-    m.addChild(new Label("insira o nome",1,10));
-    /*  select clearing (background) color       */
+{/*  select clearing (background) color       */
     glClearColor (0.0, 0.0, 0.0, 0.0);
     /*  initialize viewing values  */
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(xi, xf, yi, yf, -200.00 , 0.0);
-    newGrid();
+    
 }
 
 /*
@@ -162,21 +129,9 @@ void keyboardCall(unsigned char key, int x, int y) {
     } else {
         m = "NONE";
     } /* end if */
+    game.keyboard(key);
     
-    
-    if(states == 0){
-        if(key == 127){
-            input.removeChar();
-        }else if(key == 13){
-            states++;
-            newGrid();
-        }else{
-            
-            printf("KEY: %d with mod: %s\n", key, m);
-            input.addChar(key);
-            glutPostRedisplay();
-        }
-    }
+
 } /* end func keyboardCall */
 
 /**********************************************************************************************************************************/
@@ -235,7 +190,7 @@ void mouseCall(int button, int state, int x, int y) {
     yy = yi + yy * h; // yy está em coordenadas do OpenGL (yy=[yi..yf));
     
     
-    
+    game.mouse(xx,yy,xx, yf - yy, state);
     
     
     
@@ -264,14 +219,12 @@ void mouseCall(int button, int state, int x, int y) {
     } /* end if/else */
     
     if(state == GLUT_DOWN) {
-        printf("Mouse Depress: b(%s/%d/%s)@(%d,%d)\n", b, button, m, x, y);
+        //printf("Mouse Depress: b(%s/%d/%s)@(%d,%d)\n", b, button, m, x, y);
     } else if(state == GLUT_UP) {
         //printf("Mouse Release: b(%s/%d/%s)@(%d,%d)\n", b, button, m, x, y);
         
         
-        printf("%f\n",xx);
         
-        printf("%f\n",yy);
     } else {
         printf("Unknown Mouse Click Event: b(%d/%s)@(%d,%d)\n", button, m, x, y);
     } /* end if/else */
@@ -284,11 +237,11 @@ void motionCall(int x, int y) {
     static int oldX;
     static int oldY;
     if(notInit) {
-        printf("MOTION: (%d,%d) -> (%d,%d)\n", oldX, oldY, x, y);
+        //printf("MOTION: (%d,%d) -> (%d,%d)\n", oldX, oldY, x, y);
         oldX = x;
         oldY = y;
     } else {
-        printf("MOTION: (%d,%d)\n", x, y);
+       // printf("MOTION: (%d,%d)\n", x, y);
         oldX = x;
         oldY = y;
         notInit = 1;
@@ -339,6 +292,8 @@ void timerCall(int value) {
     glutTimerFunc(180 /*msecs*/, timerCall, 0 /*value to pass*/);
     /*printf("TIMER CALL\n");*/
 } /* end func timerCall */
+
+
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);

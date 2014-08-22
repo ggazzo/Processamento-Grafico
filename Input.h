@@ -19,7 +19,6 @@ class Input : public Drawable
 {
 public:
     Input(string , float , float );
-    unsigned char status;
     string value;
     bool cursor;
     virtual void _draw(float, float) ;

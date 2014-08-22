@@ -9,10 +9,6 @@
 #include "Input.h"
 
 
-Label::Label(string value, float x, float y) : Drawable(x,y){
-    
-    this->value = value;
-}
 
 Input::Input(string value, float x, float y) : Drawable(x,y){
     
@@ -38,13 +34,17 @@ void _write(string text){
 //    return x;
 //}
  void Input::_draw(float x, float y) {
-    
+     if(this->status){
+         return;
+     }
+     this->rx = x + this->x;
+     this->ry =y - this->y;
     glColor3ub (255, 255,255);
     glBegin(GL_QUAD_STRIP);
-    glVertex2d (x , y );
-    glVertex2d (x + 50, y );
-    glVertex2d (x , y + 10);
-    glVertex2d (x + 50 , y + 10);
+    glVertex2d (x + this->x, y - this->y);
+    glVertex2d (x + 50 + this->x, y - this->y);
+    glVertex2d (x + this->x, y - 10- this->y);
+    glVertex2d (x + 50 + this->x, y - 10- this->y);
     glEnd();
     switch (this->status) {
         case 1:
@@ -52,15 +52,15 @@ void _write(string text){
         default: // normal
             glColor3ub (150, 150, 150);
             glBegin(GL_LINE_LOOP);
-            glVertex2d (x , y );
-            glVertex2d (x + 50, y );
-            glVertex2d (x + 50 , y + 10);
-            glVertex2d (x , y + 10);
+            glVertex2d (x + this->x, y - this->y);
+            glVertex2d (x + this->x+ 50, y - this->y);
+            glVertex2d (x + this->x+ 50 , y - 10 - this->y);
+            glVertex2d (x + this->x, y - 10 - this->y);
             glColor3ub (0, 0, 0);
             glEnd();
             break;
     }
-    glRasterPos2d(x+ 1, y + 3);
+    glRasterPos2d(x+ 1+ this->x, y -7 - this->y );
 
     if(cursor){
         _write(this->value+'_');
@@ -79,9 +79,15 @@ void Input::removeChar(){
     this->value = this->value.substr(0, this->value.size()-1);
 }
 
+
+
+Label::Label(string value, float x, float y) : Drawable(x,y){
+    this->value = value;
+}
+
 void Label::_draw(float x, float y) {
     glColor3ub (0, 0, 0);
-    glRasterPos2d(x, y + 5);
+    glRasterPos2d(x, y - 5 - this->y);
     _write(this->value);
 }
 
