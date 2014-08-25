@@ -64,8 +64,8 @@ void StateGame::click(float x, float y, float xx, float yy, int state){
    
     if(this->tentativas){
     
-    
-        if(r[799 - ( (int)y/5 )*20+(int)x/10 +1]->getVisible()){
+
+        if(y > 5 &&  r[799 - ( (int)y/5 )*20+(int)x/10 +1]->getVisible()){
             this->tentativas--;
             r[799 - ( (int)y/5 )*20+(int)x/10 +1]->setVisible(false);
             this->hideElements(r[799 - ( (int)y/5 )*20+(int)x/10 +1]->r, r[799 - ( (int)y/5 )*20+(int)x/10 +1]->g,r[799 - ( (int)y/5 )*20+(int)x/10 +1]->b);
@@ -113,7 +113,8 @@ void StateGame::hideElements(int r1, int g1, int b1){
             for(int j= 0; j < 20 ; j++){
                 r[i*20+j]->draw(j*10.0,200-i*5.0);
                 if(calcRange(r1, g1, b1, r[i*20+j]->r, r[i*20+j]->g, r[i*20+j]->b)){
-                    this->pontuacao += this->pontos[this->tentativas];
+                    if (r[i*20+j]->getVisible())
+                    	this->pontuacao += this->pontos[this->tentativas];
                     r[i*20+j]->setVisible(false);
                 }
             }
@@ -126,11 +127,19 @@ void StateGame::hideElements(int r1, int g1, int b1){
 
 StateGameFinal::StateGameFinal(Game * game) : State(game){
     this->m = new Modal(50.0,50.0);
-    //printf("%d",(((StateGame*)this->game->states[STATE_JOGO])->pontuacao));
+    this->label = new Label("Pontos: ",1,10);
     this->label = new Label("Pontos: "+to_string(((StateGame*)this->game->states[STATE_JOGO])->pontuacao),1,10);
-    this->m->addChild(this->label);
+//    this->m->addChild(this->label);
 }
 void StateGameFinal::display(){
     this->label->value= "Pontos: "+to_string(((StateGame*)this->game->states[STATE_JOGO])->pontuacao);
     this->m->draw(10.0, 10.0);
 };
+
+void StateGameFinal::keyboard(unsigned char key){
+	if(key == 13){
+		this->game->states[STATE_JOGO] = new StateGame(this->game);
+		this->game->state_n = STATE_JOGO;
+	}
+
+}
