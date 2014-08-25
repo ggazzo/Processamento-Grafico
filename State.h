@@ -10,6 +10,7 @@
 #define __Teste__State__
 
 #include <iostream>
+#include <stdio.h>
 #include "Rectangle.h"
 #include "Game.h"
 #define STATE_TELAINICIAL 0
@@ -65,6 +66,7 @@ class StateGameFinal : public State{
 public:
     StateGameFinal(Game * game);
     void display(void);
+    void keyboard(unsigned char key);
 private:
     Modal *m;
     Label *label;
